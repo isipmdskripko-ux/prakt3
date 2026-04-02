@@ -1,0 +1,89 @@
+import 'dart:io';
+import 'dart:math';
+
+enum Mood {
+  happy,
+  sad,
+  excited,
+  calm,
+  angry,
+}
+
+void main() {
+  stdout.write('Введите ваше имя: ');
+  String name = stdin.readLineSync() ?? 'Гость';
+
+  print('\nГенерируем случайное настроение...');
+
+  Random random = Random();
+  Mood randomMood = Mood.values[random.nextInt(Mood.values.length)];
+
+  String emoji = '';
+  String description = '';
+  int energy = 0;
+
+  switch (randomMood) {
+    case Mood.happy:
+      emoji = '\u{1F60A}'; // 😊
+      description = 'счастливый';
+      energy = 7;
+      break;
+
+    case Mood.sad:
+      emoji = '\u{1F622}'; // 😢
+      description = 'грустный';
+      energy = 3;
+      break;
+
+    case Mood.excited:
+      emoji = '\u{1F60E}'; // 😎
+      description = 'взволнованный';
+      energy = 9;
+      break;
+
+    case Mood.calm:
+      emoji = '\u{1F60C}'; // 😌
+      description = 'спокойный';
+      energy = 4;
+      break;
+
+    case Mood.angry:
+      emoji = '\u{1F620}'; // 😠
+      description = 'злой';
+      energy = 8;
+      break;
+  }
+
+  print('Привет, $name! Твое настроение: $emoji $description (энергия: $energy/10)');
+
+  int emojiCodePoint = emoji.runes.first;
+  print('\nЮникод вашего эмодзи: U+${emojiCodePoint.toRadixString(16).toUpperCase()}');
+
+  stdout.write('\nХотите просмотреть сложные эмодзи? (да/нет): ');
+  String answer = (stdin.readLineSync() ?? '').toLowerCase().trim();
+
+  if (answer == 'да') {
+    stdout.write('Введите комбинацию эмодзи: ');
+    String emojiString = stdin.readLineSync() ?? '';
+
+    List<int> runeList = emojiString.runes.toList();
+
+    // Для учебной работы: "реальные символы" = количество кодовых точек
+    int realSymbols = runeList.length;
+
+    print('\nАнализ строки "$emojiString":');
+    print('- 16-битных единиц: ${emojiString.length}');
+    print('- Кодовых точек: ${emojiString.runes.length}');
+    print('- Реальных символов: $realSymbols');
+
+    print('\nПодробный вывод юникода:');
+
+    for (int i = 0; i < runeList.length; i++) {
+      String symbol = String.fromCharCode(runeList[i]);
+      String unicode = runeList[i].toRadixString(16).toUpperCase();
+      print('Символ ${i + 1}: $symbol → U+$unicode');
+    }
+  }
+
+  print('\nСпасибо, приходите снова!');
+}
